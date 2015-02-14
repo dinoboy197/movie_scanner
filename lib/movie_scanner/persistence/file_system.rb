@@ -4,6 +4,11 @@ module MovieScanner
     class FileSystem
       def initialize(directory)
         @directory = directory
+        freeze
+      end
+      
+      def list_items
+        Dir.glob("#{@directory}/*").map {|x| File.basename(x) }
       end
       
       def write(ui)

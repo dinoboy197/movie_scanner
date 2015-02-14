@@ -17,7 +17,7 @@ module MovieScanner
       end
       
       def show_movie(movie)
-        "<li>#{movie.title}</li>"
+        "<li>#{movie.name}</li>"
       end
     end
   end

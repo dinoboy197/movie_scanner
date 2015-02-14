@@ -1,15 +1,17 @@
+require_relative "movie_scanner/domain"
 require_relative "movie_scanner/service"
 require_relative "movie_scanner/persistence"
 require_relative "movie_scanner/ui"
 
 module MovieScanner
   class MovieScanner
-    def initialize(file_dir)
+    def initialize(input_dir, output_dir)
       # wire everything up
-      @persistence = Persistence::FileSystem.new(file_dir)
+      @input_persistence = Persistence::FileSystem.new(input_dir)
+      @output_persistence = Persistence::FileSystem.new(output_dir)
       @ui = UI::Html.new
       
-      @scanner = Service::Scanner.new
+      @scanner = Service::Scanner.new(@input_persistence)
       
     end
     
@@ -18,15 +20,15 @@ module MovieScanner
       
       ui = @ui.create_ui(movies)
       
-      @persistence.write(ui)
+      @output_persistence.write(ui)
     end
   end
 end
 
 if __FILE__ == $0
-  file_dir = ARGV[0]
-  puts file_dir
+  input_dir = ARGV[0]
+  output_dir = ARGV[1]
 
-  MovieScanner::MovieScanner.new(file_dir).run
+  MovieScanner::MovieScanner.new(input_dir, output_dir).run
 end
 
