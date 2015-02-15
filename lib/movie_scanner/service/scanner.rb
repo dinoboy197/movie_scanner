@@ -1,3 +1,5 @@
+require 'parallel'
+
 module MovieScanner
   module Service
     class Scanner
@@ -12,7 +14,7 @@ module MovieScanner
 
         my_sources = names.map {|name| Domain::SourceData.new('Taylor', name, nil, nil) }
 
-        my_sources.map do |my_source|
+        Parallel.map(my_sources, :in_threads => 10) do |my_source|
           # collect new data from sources
           enriched_data = @enrichers.map {|enricher| enricher.enrich_movie(my_source.title) }.compact
 
