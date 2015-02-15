@@ -8,7 +8,7 @@ module MovieScanner
       end
       
       def list_items
-        Dir.glob("#{@directory}/*").map {|x| File.basename(x) }
+        Dir.glob("#{@directory}/*").map {|x| File.basename(x, '.*') }
       end
       
       def write(ui)
