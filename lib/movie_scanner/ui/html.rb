@@ -13,11 +13,11 @@ module MovieScanner
       end
       
       def show_body(movies)
-        "<body><ul>#{movies.sort{|a,b| a.name <=> b.name }.map {|movie| show_movie(movie)}.join('')}</ul></body>"
+        "<body><ul>#{movies.sort{|a,b| a.title <=> b.title }.map {|movie| show_movie(movie)}.join('')}</ul></body>"
       end
       
       def show_movie(movie)
-        "<li>#{movie.name}</li>"
+        "<li>#{movie.title}</li>"
       end
     end
   end

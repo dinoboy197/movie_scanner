@@ -1,6 +1,6 @@
 require_relative "movie_scanner/domain"
-require_relative "movie_scanner/service"
 require_relative "movie_scanner/persistence"
+require_relative "movie_scanner/service"
 require_relative "movie_scanner/ui"
 
 module MovieScanner
@@ -11,7 +11,9 @@ module MovieScanner
       @output_persistence = Persistence::FileSystem.new(output_dir)
       @ui = UI::Html.new
       
-      @scanner = Service::Scanner.new(@input_persistence)
+      enrichers = [Service::Enrichment::RottenTomatoes.new]
+      merger = Service::Merger.new
+      @scanner = Service::Scanner.new(enrichers, merger, @input_persistence)
       
     end
     
