@@ -10,11 +10,17 @@ module MovieScanner
       def find_movies
         names = @persistence.list_items
 
-        names.map do |name|
-          enriched_data = @enrichers.map {|enricher| enricher.enrich_movie(name) }
-            
+        my_sources = names.map {|name| Domain::SourceData.new('Taylor', name, nil, nil) }
+
+        my_sources.map do |my_source|
+          # collect new data from sources
+          enriched_data = @enrichers.map {|enricher| enricher.enrich_movie(my_source.title) }.compact
+
+          # add original data
+          enriched_data = enriched_data.push(my_source)
+
           @merger.merge_to_movie(enriched_data)
-        end
+        end.compact
       end
     end
   end
