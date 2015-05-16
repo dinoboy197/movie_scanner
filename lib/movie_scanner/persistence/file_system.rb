@@ -3,6 +3,13 @@ module MovieScanner
     # writes out information to Files
     class FileSystem
       def initialize(directory)
+        if directory.nil?
+          raise "Directory was missing"
+        end
+        unless Dir.exist?(directory)
+          raise "Directory #{directory} does not exist"
+        end
+
         @directory = directory
         freeze
       end
