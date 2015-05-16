@@ -18,9 +18,10 @@ module MovieScanner
     end
     
     def run
+      time = Time.now
       movies = @scanner.find_movies
       
-      ui = @ui.create_ui(movies)
+      ui = @ui.create_ui(time, movies)
       
       @output_persistence.write(ui)
     end
