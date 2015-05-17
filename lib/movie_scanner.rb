@@ -11,7 +11,7 @@ module MovieScanner
       @output_persistence = Persistence::FileSystem.new(output_dir)
       @ui = UI::Html.new
       
-      enrichers = [Service::Enrichment::RottenTomatoes.new]
+      enrichers = [Service::Enrichment::IMDB.new, Service::Enrichment::RottenTomatoes.new]
       merger = Service::Merger.new
       @scanner = Service::Scanner.new(enrichers, merger, @input_persistence)
       

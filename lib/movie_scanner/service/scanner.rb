@@ -1,4 +1,5 @@
 require 'parallel'
+require 'ostruct'
 
 module MovieScanner
   module Service
@@ -12,15 +13,16 @@ module MovieScanner
       def find_movies
         names = @persistence.list_items
 
-        my_sources = names.map {|name| Domain::SourceData.new('Taylor', name, nil, nil) }
+        base_movies = names.map {|name| Domain::SourceData.new({:source => OpenStruct.new(:source_priority => 9999, :source_name => "Original"), :title => name}) }
 
-        my_sources.map do |my_source|
+        base_movies.map do |base_movie|
           # collect new data from sources
-          enriched_data = @enrichers.map {|enricher| enricher.enrich_movie(my_source.title) }.compact
+          enriched_data = @enrichers.map {|enricher| enricher.enrich_movie(base_movie.title) }.compact
 
           # add original data
-          enriched_data = enriched_data.push(my_source)
+          enriched_data << base_movie
 
+          # merge all data into a movie object
           @merger.merge_to_movie(enriched_data)
         end.compact
       end

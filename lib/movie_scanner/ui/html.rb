@@ -17,7 +17,7 @@ module MovieScanner
       end
       
       def show_movie(movie)
-        "<li>#{movie.title}</li>"
+        "<li><img src=\"#{movie.poster_url}\"></img> <strong>#{movie.title}</strong> - #{movie.genre} - #{movie.year} - #{movie.synopsis} - rating: #{movie.rating} - scores: #{movie.scores} - runtime: #{movie.runtime}</li>"
       end
     end
   end

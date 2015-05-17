@@ -13,7 +13,11 @@ module MovieScanner
         end
 
         def source_priority
-          1
+          20
+        end
+        
+        def source_name
+          "Rotten Tomatoes"
         end
 
         def enrich_movie(title)
@@ -35,11 +39,21 @@ module MovieScanner
           else
             best_result = results
           end
+          
+          score = best_result.ratings.critics_score
 
-          #@movie.ratings.critics_score
-          #@movie.synopsis
-
-          Domain::SourceData.new(:"Rotten Tomatoes", best_result.title, nil, nil)
+          Domain::SourceData.new({
+            :source => self, 
+            :title => best_result.title,
+            :year => best_result.year,
+            :synopsis => best_result.synopsis,
+            :rating => best_result.mpaa_rating,
+            :runtime => best_result.runtime,
+            :poster_url => best_result.posters.profile,
+            # choose the critics score over the audience score - 
+            # had to make a choice if a source can only provide one rating
+            :score => (score > 0 && best_result.ratings.critics_score) || nil
+          })
         end
       end
     end
