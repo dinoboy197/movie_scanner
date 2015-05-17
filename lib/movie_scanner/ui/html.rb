@@ -13,7 +13,9 @@ module MovieScanner
       end
       
       def show_body(time, movies)
-        "<body><h2>Taylor's Movies - Generated at #{time.strftime("%A, %b %e %Y, %r")}</h2><ul>#{movies.sort{|a,b| a.title <=> b.title }.map {|movie| show_movie(movie)}.join('')}</ul></body>"
+        # sort movies by title, ignoring first "The "
+        sorted_movies = movies.sort{|a,b| a.title.sub(/^The /,'') <=> b.title.sub(/^The /,'') }
+        "<body><h2>Taylor's Movies - Generated at #{time.strftime("%A, %b %e %Y, %r")}</h2><ul>#{sorted_movies.map {|movie| show_movie(movie)}.join('')}</ul></body>"
       end
       
       def show_movie(movie)
