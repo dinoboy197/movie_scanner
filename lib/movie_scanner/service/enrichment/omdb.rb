@@ -39,7 +39,7 @@ module MovieScanner
             :rating => best_result["Rated"],
             :runtime => best_result["Runtime"].to_i,
             # don't include imdb urls, we can't access them from a different host
-            :poster_url => best_result["Poster"].include?("imdb.com") ? nil : best_result["Poster"],
+            :poster_url => best_result["Poster"].nil? || best_result["Poster"].include?("imdb.com") ? nil : best_result["Poster"],
             :score => best_result["Metascore"].to_i
           })
         end
