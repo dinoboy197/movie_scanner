@@ -6,7 +6,7 @@ require 'cgi'
 module MovieScanner
   module Service
     module Enrichment
-      class IMDB
+      class OMDB
         def initialize
           @dl = DamerauLevenshtein
         end
@@ -16,7 +16,7 @@ module MovieScanner
         end
         
         def source_name
-          "IMDB"
+          "OMDB"
         end
 
         def enrich_movie(title)
@@ -38,8 +38,9 @@ module MovieScanner
             :synopsis => best_result["Plot"],
             :rating => best_result["Rated"],
             :runtime => best_result["Runtime"].to_i,
-            :poster_url => best_result["Poster"],
-            :score => (best_result["imdbRating"].to_f * 10).to_i
+            # don't include imdb urls, we can't access them from a different host
+            :poster_url => best_result["Poster"].include?("imdb.com") ? nil : best_result["Poster"],
+            :score => best_result["Metascore"].to_i
           })
         end
       end
